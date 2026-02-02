@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shyamala Rose J | Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            scroll-behavior: smooth;
+        }
+        .hero {
+            background: linear-gradient(120deg, #0f172a, #1e293b);
+            color: white;
+            padding: 90px 0;
+        }
+        .section-title {
+            border-bottom: 3px solid #0d6efd;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        #contact a:hover {
+            color: #0d6efd;
+            transform: scale(1.1);
+            transition: 0.3s;l
+        }
+        .carousel-inner img {
+    height: 320px;          /* 🔽 reduce height */
+    object-fit: contain;    /* keeps full image without cropping */
+    background-color: #f8f9fa;
+}
+
+    
+
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="#">Shyamala Rose J</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+                <li class="nav-item"><a class="nav-link" href="#internship">Internship</a></li>
+                <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+                <li class="nav-item"><a class="nav-link" href="#education">Education</a></li>
+                <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero text-center">
+    <div class="container">
+        <h1 class="display-5 fw-bold">Shyamala Rose J</h1>
+        <p class="lead">Computer Science Engineering Student</p>
+        <p>Front-End & Web Development Enthusiast</p>
+    </div>
+</section>
+
+<!-- About -->
+<section id="about" class="py-5">
+    <div class="container">
+        <h2 class="section-title">About Me</h2>
+        <p>
+            Enthusiastic Computer Science and Engineering student with a strong interest in
+            front-end and web development. Passionate about creating responsive, visually
+            appealing websites and continuously improving technical skills.
+        </p>
+    </div>
+</section>
+
+<!-- Skills -->
+<section id="skills" class="bg-light py-5">
+    <div class="container">
+        <h2 class="section-title">Technical Skills</h2>
+
+        <div class="row">
+            <div class="col-md-4">
+                <ul>
+                    <li>HTML5, CSS3</li>
+                    <li>Responsive Web Design</li>
+                    <li>JavaScript</li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <ul>
+                    <li>PHP & WordPress Development</li>
+                    <li>MySQL / phpMyAdmin</li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <ul>
+                    <li>Python, Java</li>
+                    <li>Git & GitHub</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Internship -->
+<section id="internship" class="py-5">
+    <div class="container">
+        <h2 class="section-title">Internship Experience</h2>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5>Web Development Intern</h5>
+                <h6>Zayith Technologies, Madurai — June 2025</h6>
+                <ul>
+                    <li>Developed a fully responsive multi-page website using HTML, CSS, JavaScript, PHP, and MySQL</li>
+                    <li>Implemented secure contact forms with email notifications</li>
+                    <li>Customized WordPress and optimized SEO and performance</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5>Web Development Intern</h5>
+                <h6>Tarcin Robotics Pvt. Ltd, Madurai — Dec 2025 – Feb 2026</h6>
+                <p>
+                    Currently contributing to company projects involving website development,
+                    debugging, and feature implementation.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Projects Carousel -->
+<div id="projectCarousel" class="carousel slide mt-4" data-bs-ride="carousel">
+
+    <!-- Indicators -->
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#projectCarousel" data-bs-slide-to="0" class="active"></button>
+        <button type="button" data-bs-target="#projectCarousel" data-bs-slide-to="1"></button>
+        <button type="button" data-bs-target="#projectCarousel" data-bs-slide-to="2"></button>
+    </div>
+
+    <!-- Slides -->
+    <div class="carousel-inner">
+
+        <div class="carousel-item active">
+            <img src="images/project1.jpg" class="d-block w-100" alt="Project 1">
+            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-75 rounded p-2">
+                <h5>Sam Constructions Website</h5>
+                <p>HTML • CSS • JavaScript • PHP • MySQL</p>
+            </div>
+        </div>
+
+        <div class="carousel-item">
+            <img src="images/project2.jpg" class="d-block w-100" alt="Project 2">
+            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-75 rounded p-2">
+                <h5>3D Virtual Plants Garden</h5>
+                <p>Three.js • JavaScript • PHP • MySQL</p>
+            </div>
+        </div>
+
+        <div class="carousel-item">
+            <img src="images/project3.jpg" class="d-block w-100" alt="Project 3">
+            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-75 rounded p-2">
+                <h5>Additional Project</h5>
+                <p>Web Development Project</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Controls -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#projectCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+
+    <button class="carousel-control-next" type="button" data-bs-target="#projectCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+
+</div>
+
+
+<!-- Projects -->
+<section id="projects" class="bg-light py-5">
+    <div class="container">
+        <h2 class="section-title">Projects</h2>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5>Sam Constructions – Construction & Furniture Website</h5>
+                <p>
+                    Developed a business website with frontend using HTML, CSS, JavaScript,
+                    backend in PHP, and MySQL database integration.
+                </p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5>3D Virtual Plants Garden</h5>
+                <p>
+                    Created a real-time interactive website to visualize 3D plant models using
+                    Three.js with backend support in PHP and MySQL.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Education -->
+<section id="education" class="py-5">
+    <div class="container">
+        <h2 class="section-title">Education</h2>
+
+        <ul>
+            <li>
+                <strong>B.E Computer Science and Engineering</strong><br>
+                Kamaraj College of Engineering and Technology (2023–2027)<br>
+                CGPA: 8.53
+            </li>
+            <br>
+            <li>
+                <strong>HSC:</strong> 88% | <strong>SSLC:</strong> Pass <br>
+                St. John’s Matriculation Higher Secondary School
+            </li>
+        </ul>
+    </div>
+</section>
+
+<!-- Contact -->
+<section id="contact" class="bg-dark text-white py-5">
+    <div class="container text-center">
+        <h2 class="section-title text-white">Contact</h2>
+
+        <p class="mt-4">
+            <i class="fas fa-phone me-2"></i> +91 7339031917
+        </p>
+        <p>
+            <i class="fas fa-envelope me-2"></i> shyamalarose1010@gmail.com
+        </p>
+
+        <div class="mt-4">
+            <a href="https://www.linkedin.com/in/shyamala-rose1010/" target="_blank"
+               class="text-white me-4 fs-3">
+                <i class="fab fa-linkedin"></i>
+            </a>
+            <a href="https://github.com/rose-1010" target="_blank"
+               class="text-white fs-3">
+                <i class="fab fa-github"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<footer class="text-center py-3 bg-black text-white">
+    © 2026 Shyamala Rose J | Portfolio
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
