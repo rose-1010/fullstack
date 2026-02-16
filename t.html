@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html ng-app="taskApp">
+<head>
+    <title>TaskMaster Hub - Version 2</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: linear-gradient(90deg,#4361ee,#118ab2);
+            display:flex;
+            justify-content:center;
+            margin-top:40px;
+        }
+
+        .container {
+            background:white;
+            padding:30px;
+            width:500px;
+            border-radius:10px;
+            box-shadow:0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        h2 { text-align:center; }
+
+        .completed {
+            text-decoration: line-through;
+            color: gray;
+        }
+
+        input[type="text"] {
+            padding:8px;
+            width:70%;
+        }
+
+        button {
+            padding:6px 10px;
+            margin-left:5px;
+            cursor:pointer;
+        }
+
+        .filters button {
+            margin:5px 3px;
+        }
+
+        ul {
+            list-style:none;
+            padding:0;
+        }
+
+        li {
+            padding:8px 0;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+        }
+
+        .task-text {
+            flex:1;
+            margin-left:8px;
+        }
+
+        .edit-input {
+            width:100%;
+            padding:5px;
+        }
+
+        .footer {
+            margin-top:15px;
+            text-align:center;
+        }
+    </style>
+</head>
+
+<body ng-controller="taskController">
+
+<div class="container">
+
+    <h2>TaskMaster Hub</h2>
+
+    <p><strong>{{getRemaining()}}</strong> of {{tasks.length}} remaining</p>
+
+    <div class="filters">
+        <button ng-click="statusFilter = undefined">All</button>
+        <button ng-click="statusFilter = false">Pending</button>
+        <button ng-click="statusFilter = true">Completed</button>
+        <button ng-click="removeCompleted()">Clear Completed</button>
+    </div>
+
+    <ul>
+        <li ng-repeat="item in tasks | filter:{completed:statusFilter} track by $index">
+
+            <div style="display:flex;align-items:center;width:100%;">
+
+                <input type="checkbox" ng-model="item.completed" ng-change="updateStorage()">
+
+                <!-- Display Mode -->
+                <span ng-if="!item.isEditing"
+                      ng-dblclick="enableEdit(item)"
+                      ng-class="{'completed': item.completed}"
+                      class="task-text">
+                    {{item.title}}
+                </span>
+
+                <!-- Edit Mode -->
+                <input type="text"
+                       ng-if="item.isEditing"
+                       ng-model="item.title"
+                       class="edit-input"
+                       ng-blur="disableEdit(item)"
+                       ng-keydown="$event.keyCode==13 && disableEdit(item)">
+
+                <button ng-if="!item.isEditing" ng-click="enableEdit(item)">Edit</button>
+                <button ng-click="deleteTask($index)">Delete</button>
+
+            </div>
+
+        </li>
+    </ul>
+
+    <div style="margin-top:15px;">
+        <input type="text"
+               ng-model="taskInput"
+               placeholder="Add new task here"
+               ng-keydown="$event.keyCode==13 && addTask()">
+        <button ng-click="addTask()">Add</button>
+    </div>
+
+</div>
+
+<script>
+angular.module("taskApp", [])
+.controller("taskController", function($scope) {
+
+    /* Load Tasks */
+    function loadTasks(){
+        var stored = localStorage.getItem("taskmasterData");
+        return stored ? JSON.parse(stored) : [
+            {title:"Practice AngularJS", completed:false},
+            {title:"Complete Assignment", completed:false}
+        ];
+    }
+
+    $scope.tasks = loadTasks();
+
+    /* Save Tasks */
+    $scope.updateStorage = function(){
+        localStorage.setItem("taskmasterData", JSON.stringify($scope.tasks));
+    };
+
+    /* Add Task */
+    $scope.addTask = function(){
+        if($scope.taskInput && $scope.taskInput.trim() !== ""){
+            $scope.tasks.push({
+                title:$scope.taskInput,
+                completed:false,
+                isEditing:false
+            });
+            $scope.taskInput="";
+            $scope.updateStorage();
+        }
+    };
+
+    /* Delete Task */
+    $scope.deleteTask = function(index){
+        $scope.tasks.splice(index,1);
+        $scope.updateStorage();
+    };
+
+    /* Enable Edit */
+    $scope.enableEdit = function(item){
+        item.isEditing=true;
+    };
+
+    /* Disable Edit */
+    $scope.disableEdit = function(item){
+        item.isEditing=false;
+        $scope.updateStorage();
+    };
+
+    /* Clear Completed */
+    $scope.removeCompleted = function(){
+        $scope.tasks = $scope.tasks.filter(function(task){
+            return !task.completed;
+        });
+        $scope.updateStorage();
+    };
+
+    /* Remaining Count */
+    $scope.getRemaining = function(){
+        return $scope.tasks.filter(function(task){
+            return !task.completed;
+        }).length;
+    };
+
+});
+</script>
+
+</body>
+</html>

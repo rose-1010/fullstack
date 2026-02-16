@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Web Application using jQuery</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- jQuery CDN -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<style>
+body{
+    font-family:Segoe UI, sans-serif;
+    background:#f3f4f6;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
+
+.quiz-box{
+    width:450px;
+    background:white;
+    padding:30px;
+    border-radius:16px;
+    box-shadow:0 20px 40px rgba(0,0,0,.2);
+}
+
+h2{
+    margin-bottom:15px;
+}
+
+.option{
+    background:#f9fafb;
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:10px;
+    cursor:pointer;
+    border:2px solid transparent;
+}
+
+.option:hover{
+    background:#eef2ff;
+}
+
+.option.selected{
+    border-color:#6366f1;
+    background:#eef2ff;
+}
+
+.buttons{
+    display:flex;
+    justify-content:space-between;
+    margin-top:20px;
+}
+
+button{
+    padding:10px 20px;
+    border:none;
+    border-radius:10px;
+    background:#6366f1;
+    color:white;
+    cursor:pointer;
+}
+
+button:disabled{
+    background:#9ca3af;
+}
+
+.error{
+    color:red;
+    margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="quiz-box">
+    <h2 id="question"></h2>
+    <div id="options"></div>
+
+    <div class="buttons">
+        <button id="prevBtn">Previous</button>
+        <button id="nextBtn">Next</button>
+    </div>
+
+    <p class="error" id="error"></p>
+</div>
+
+<script>
+$(document).ready(function(){
+
+    // ==========================
+    // QUIZ QUESTIONS
+    // ==========================
+    const quiz = [
+        {
+            q: "What does HTML stand for?",
+            options: [
+                "Hyper Text Markup Language",
+                "High Text Machine Language",
+                "Hyperlinks and Text Markup Language"
+            ],
+            answer: 0
+        },
+        {
+            q: "Which language is used for styling web pages?",
+            options: ["HTML", "CSS", "JavaScript"],
+            answer: 1
+        },
+        {
+            q: "Which library is JavaScript-based?",
+            options: ["React", "Laravel", "Django"],
+            answer: 0
+        },
+        {
+            q: "Which symbol is used in jQuery?",
+            options: ["#", "$", "&"],
+            answer: 1
+        }
+    ];
+
+    let index = 0;
+    let userAnswers = [];
+
+    // ==========================
+    // LOAD QUESTION
+    // ==========================
+    function loadQuestion(){
+        $("#error").text("");
+
+        let q = quiz[index];
+        $("#question").fadeOut(function(){
+            $(this).text(q.q).fadeIn();
+        });
+
+        $("#options").empty();
+
+        $.each(q.options, function(i, opt){
+            let div = $("<div>")
+                .addClass("option")
+                .text(opt)
+                .data("index", i);
+
+            if(userAnswers[index] === i){
+                div.addClass("selected");
+            }
+
+            $("#options").append(div);
+        });
+
+        $("#prevBtn").prop("disabled", index === 0);
+        $("#nextBtn").text(index === quiz.length - 1 ? "Submit" : "Next");
+    }
+
+    // ==========================
+    // OPTION CLICK
+    // ==========================
+    $(document).on("click", ".option", function(){
+        $(".option").removeClass("selected");
+        $(this).addClass("selected");
+        userAnswers[index] = $(this).data("index");
+    });
+
+    // ==========================
+    // NEXT BUTTON
+    // ==========================
+    $("#nextBtn").click(function(){
+        if(userAnswers[index] === undefined){
+            $("#error").text("Please select an answer before continuing.");
+            return;
+        }
+
+        if(index === quiz.length - 1){
+            showResult();
+        } else {
+            index++;
+            loadQuestion();
+        }
+    });
+
+    // ==========================
+    // PREVIOUS BUTTON
+    // ==========================
+    $("#prevBtn").click(function(){
+        index--;
+        loadQuestion();
+    });
+
+    // ==========================
+    // SHOW RESULT
+    // ==========================
+    function showResult(){
+        let score = 0;
+
+        $.each(quiz, function(i, q){
+            if(userAnswers[i] === q.answer){
+                score++;
+            }
+        });
+
+        $(".quiz-box").html(`
+            <h2>Quiz Completed</h2>
+            <p>You scored <strong>${score}</strong> out of <strong>${quiz.length}</strong></p>
+            <button onclick="location.reload()">Restart Quiz</button>
+        `);
+    }
+
+    loadQuestion();
+});
+</script>
+
+</body>
+</html>
