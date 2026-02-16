@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NPTEL / KCET Online Exam</title>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<style>
+body{
+margin:0;
+font-family:Segoe UI;
+background:linear-gradient(90deg,#4361ee,#118ab2);
+}
+
+.wrapper{
+width:900px;
+margin:30px auto;
+background:#f8fafc;
+padding:30px;
+border-radius:10px;
+}
+
+h2{text-align:center;margin-bottom:10px;}
+
+.top-row{
+display:flex;
+justify-content:space-between;
+font-weight:600;
+}
+
+.timer{
+color:#dc2626;
+font-size:18px;
+}
+
+.qnums{
+text-align:center;
+margin:20px 0;
+}
+
+.qnum{
+display:inline-block;
+width:38px;
+height:38px;
+line-height:38px;
+border-radius:50%;
+margin:5px;
+cursor:pointer;
+background:#e5e7eb;
+}
+
+.qnum.active{background:#2563eb;color:white;}
+.qnum.answered{background:#16a34a;color:white;}
+.qnum.review{background:#facc15;color:black;}
+
+.progress{
+height:8px;
+background:#cbd5e1;
+border-radius:10px;
+margin:15px 0;
+}
+.bar{
+height:8px;
+background:#2563eb;
+border-radius:10px;
+width:0%;
+}
+
+.question{
+font-size:20px;
+margin:20px 0;
+}
+
+.option{
+background:white;
+border:2px solid #e5e7eb;
+padding:14px;
+border-radius:8px;
+margin:10px 0;
+cursor:pointer;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.option input{transform:scale(1.2);}
+.option.selected{
+border-color:#2563eb;
+background:#eef2ff;
+}
+
+.buttons{
+display:flex;
+justify-content:center;
+gap:10px;
+margin-top:25px;
+}
+
+button{
+padding:10px 22px;
+border:none;
+border-radius:8px;
+font-weight:600;
+cursor:pointer;
+}
+
+.prev{background:#6b7280;color:white;}
+.next{background:#2563eb;color:white;}
+.skip{background:#f59e0b;color:white;}
+.reviewBtn{background:#facc15;}
+.submit{background:#16a34a;color:white;}
+
+.result{
+margin-top:30px;
+}
+.correct{
+background:#ecfdf5;
+border-left:5px solid #16a34a;
+padding:12px;
+margin:10px 0;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<h2>NPTEL / KCET Online Examination</h2>
+
+<div class="top-row">
+<div>Question <span id="qno">1</span></div>
+<div class="timer">Time Left: <span id="time">30:00</span></div>
+</div>
+
+<div class="qnums"></div>
+
+<div class="progress"><div class="bar"></div></div>
+
+<div class="question"></div>
+<div class="options"></div>
+
+<div class="buttons">
+<button class="prev">Previous</button>
+<button class="skip">Skip</button>
+<button class="reviewBtn">Mark for Review</button>
+<button class="next">Next</button>
+<button class="submit">Submit</button>
+</div>
+
+<div class="result"></div>
+
+</div>
+
+<script>
+$(function(){
+
+/* QUESTIONS */
+var quiz=[
+{q:"HTML stands for?",o:["Hyper Text Markup Language","High Tool","Hyperlinks Text"],a:0,type:"single"},
+{q:"CSS is used for?",o:["Design","Styling","Database"],a:1,type:"single"},
+{q:"Which is a JavaScript library?",o:["Bootstrap","jQuery","HTML"],a:1,type:"single"},
+{q:"Which are Programming Languages?",o:["JavaScript","HTML","Python","CSS"],a:[0,2],type:"multi"},
+{q:"Responsive design uses?",o:["Bootstrap","Java","Python"],a:0,type:"single"}
+];
+
+var current=0;
+var answers=[];
+var review=[];
+var examTime = 30 * 60; // 30 minutes
+var examTimer;
+
+/* DASHBOARD */
+function loadNums(){
+let html="";
+quiz.forEach((q,i)=>{
+html+=`<span class="qnum" data-i="${i}">${i+1}</span>`;
+});
+$(".qnums").html(html);
+}
+
+function updateNums(){
+$(".qnum").removeClass("active answered review");
+
+quiz.forEach((q,i)=>{
+if(answers[i]!=null && (!Array.isArray(answers[i]) || answers[i].length>0))
+$(".qnum").eq(i).addClass("answered");
+if(review[i]) $(".qnum").eq(i).addClass("review");
+});
+
+$(".qnum").eq(current).addClass("active");
+}
+
+/* GLOBAL TIMER */
+function startExamTimer(){
+examTimer=setInterval(()=>{
+examTime--;
+let m=Math.floor(examTime/60);
+let s=examTime%60;
+$("#time").text(String(m).padStart(2,"0")+":"+String(s).padStart(2,"0"));
+
+if(examTime<=0){
+clearInterval(examTimer);
+showResult();
+}
+},1000);
+}
+
+/* PROGRESS */
+function updateProgress(){
+$(".bar").css("width",((current+1)/quiz.length)*100+"%");
+}
+
+/* LOAD QUESTION */
+function loadQ(){
+let q=quiz[current];
+$("#qno").text(current+1);
+$(".question").text(q.q);
+
+let html="";
+if(q.type==="multi"){
+let sel=answers[current]||[];
+q.o.forEach((op,i)=>{
+let checked=sel.includes(i)?"checked":"";
+let s=sel.includes(i)?"selected":"";
+html+=`
+<label class="option ${s}">
+<input type="checkbox" value="${i}" ${checked}> ${op}
+</label>`;
+});
+}else{
+q.o.forEach((op,i)=>{
+let checked=answers[current]==i?"checked":"";
+let s=answers[current]==i?"selected":"";
+html+=`
+<label class="option ${s}">
+<input type="radio" name="opt" value="${i}" ${checked}> ${op}
+</label>`;
+});
+}
+
+$(".options").html(html);
+updateNums();
+updateProgress();
+}
+
+/* ANSWER SELECT */
+$(document).on("change",".options input",function(){
+let q=quiz[current];
+if(q.type==="multi"){
+let sel=[];
+$(".options input:checked").each(function(){
+sel.push(parseInt($(this).val()));
+});
+answers[current]=sel;
+}else{
+answers[current]=parseInt($(this).val());
+}
+$(".option").removeClass("selected");
+$(".options input:checked").parent().addClass("selected");
+updateNums();
+});
+
+/* NAVIGATION */
+$(".next").click(()=>{ if(current<quiz.length-1){ current++; loadQ(); }});
+$(".prev").click(()=>{ if(current>0){ current--; loadQ(); }});
+$(".skip").click(()=>{ if(current<quiz.length-1){ current++; loadQ(); }});
+$(".qnums").on("click",".qnum",function(){
+current=$(this).data("i");
+loadQ();
+});
+
+/* REVIEW */
+$(".reviewBtn").click(()=>{
+review[current]=!review[current];
+updateNums();
+});
+
+/* SUBMIT */
+$(".submit").click(showResult);
+
+function showResult(){
+clearInterval(examTimer);
+$(".options,.buttons,.qnums").hide();
+
+let score=0;
+let html="<h3>Exam Completed</h3>";
+
+quiz.forEach((q,i)=>{
+if(q.type==="multi"){
+let correct=JSON.stringify((answers[i]||[]).sort())===JSON.stringify(q.a.sort());
+if(correct) score++;
+html+=`<div class="correct">${i+1}. ${q.q}<br>Correct: ${q.a.map(x=>q.o[x]).join(", ")}</div>`;
+}else{
+if(answers[i]==q.a) score++;
+html+=`<div class="correct">${i+1}. ${q.q}<br>Correct: ${q.o[q.a]}</div>`;
+}
+});
+
+let used=(30*60)-examTime;
+html+=`<h3>Score: ${score}/${quiz.length}</h3>`;
+html+=`<p>Time Used: ${Math.floor(used/60)} min ${used%60} sec</p>`;
+html+=`<button onclick="location.reload()">Restart Exam</button>`;
+
+$(".result").html(html);
+}
+
+/* INIT */
+loadNums();
+loadQ();
+startExamTimer();
+
+});
+</script>
+
+</body>
+</html>
